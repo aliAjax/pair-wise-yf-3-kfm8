@@ -1,11 +1,14 @@
-import { Plus } from 'lucide-react';
+import { Plus, Archive } from 'lucide-react';
 
 interface Props {
   onAdd: () => void;
   memoryCount: number;
+  view: 'active' | 'archived';
+  archivedCount: number;
+  onToggleView: () => void;
 }
 
-export default function Header({ onAdd, memoryCount }: Props) {
+export default function Header({ onAdd, memoryCount, view, archivedCount, onToggleView }: Props) {
   return (
     <header className="relative pt-14 pb-8 md:pt-20 md:pb-12">
       <div className="container max-w-6xl">
@@ -22,7 +25,7 @@ export default function Header({ onAdd, memoryCount }: Props) {
             <p className="mt-3 font-hand text-lg md:text-xl text-ink-700/70 pl-1 relative z-10">
               封存每一缕难以忘怀的空气，把嗅觉变成可以翻阅的回忆
             </p>
-            <div className="mt-4 flex items-center gap-4 pl-1">
+            <div className="mt-4 flex items-center gap-4 pl-1 flex-wrap">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-paper-200/80 text-ink-700/80 text-sm border border-paper-300">
                 <span className="text-base">📚</span>
                 已封存 <b className="text-ochre-600 font-semibold">{memoryCount}</b> 段气味
@@ -31,6 +34,24 @@ export default function Header({ onAdd, memoryCount }: Props) {
                 <span className="text-base">🌿</span>
                 仅你可见
               </span>
+              <button
+                onClick={onToggleView}
+                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm border transition-all ${
+                  view === 'archived'
+                    ? 'bg-brick-500 text-paper-50 border-brick-600'
+                    : 'bg-paper-50 text-brick-600 border-paper-300 hover:bg-paper-200/80'
+                }`}
+              >
+                <Archive className="w-3.5 h-3.5" />
+                {view === 'archived' ? '返回档案' : '移走区'}
+                {archivedCount > 0 && (
+                  <span className={`inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full text-[10px] font-bold ${
+                    view === 'archived' ? 'bg-paper-50 text-brick-600' : 'bg-brick-500 text-paper-50'
+                  }`}>
+                    {archivedCount}
+                  </span>
+                )}
+              </button>
             </div>
           </div>
           <button

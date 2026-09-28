@@ -1,4 +1,4 @@
-import { RotateCcw } from 'lucide-react';
+import { RotateCcw, Heart, HeartCrack } from 'lucide-react';
 import { SEASONS, SMELL_TYPES, EMOTIONS } from '../utils/constants';
 import type { Filters } from '../utils/helpers';
 
@@ -17,8 +17,12 @@ function makeSelectClass(active: boolean) {
   }`;
 }
 
+function chevronBg(active: boolean) {
+  return `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23${active ? 'FBF7EE' : '8B5A2B'}' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`;
+}
+
 export default function FilterPanel({ filters, onChange, onReset, resultCount }: Props) {
-  const hasFilter = filters.smellType || filters.season || filters.emotion;
+  const hasFilter = filters.smellType || filters.season || filters.emotion || filters.wantAgain;
 
   return (
     <section className="container max-w-6xl mb-6">
@@ -36,7 +40,7 @@ export default function FilterPanel({ filters, onChange, onReset, resultCount }:
                 onChange={(e) => onChange('smellType', e.target.value)}
                 className={`${makeSelectClass(!!filters.smellType)} w-full sm:w-auto`}
                 style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23${filters.smellType ? 'FBF7EE' : '8B5A2B'}' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+                  backgroundImage: chevronBg(!!filters.smellType),
                   backgroundRepeat: 'no-repeat',
                   backgroundPosition: 'right 12px center',
                 }}
@@ -56,7 +60,7 @@ export default function FilterPanel({ filters, onChange, onReset, resultCount }:
                 onChange={(e) => onChange('season', e.target.value)}
                 className={`${makeSelectClass(!!filters.season)} w-full sm:w-auto`}
                 style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23${filters.season ? 'FBF7EE' : '8B5A2B'}' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+                  backgroundImage: chevronBg(!!filters.season),
                   backgroundRepeat: 'no-repeat',
                   backgroundPosition: 'right 12px center',
                 }}
@@ -76,7 +80,7 @@ export default function FilterPanel({ filters, onChange, onReset, resultCount }:
                 onChange={(e) => onChange('emotion', e.target.value)}
                 className={`${makeSelectClass(!!filters.emotion)} w-full sm:w-auto`}
                 style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23${filters.emotion ? 'FBF7EE' : '8B5A2B'}' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+                  backgroundImage: chevronBg(!!filters.emotion),
                   backgroundRepeat: 'no-repeat',
                   backgroundPosition: 'right 12px center',
                 }}
@@ -88,6 +92,35 @@ export default function FilterPanel({ filters, onChange, onReset, resultCount }:
                   </option>
                 ))}
               </select>
+            </div>
+
+            <div className="flex items-center gap-1.5 rounded-xl border border-paper-300 bg-paper-50 p-1">
+              <button
+                type="button"
+                onClick={() => onChange('wantAgain', filters.wantAgain === 'yes' ? '' : 'yes')}
+                title="按主记录判定"
+                className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                  filters.wantAgain === 'yes'
+                    ? 'bg-moss-500 text-paper-50 shadow-sm'
+                    : 'text-moss-700 hover:bg-moss-100'
+                }`}
+              >
+                <Heart className={`w-3.5 h-3.5 ${filters.wantAgain === 'yes' ? 'fill-current' : ''}`} />
+                想再闻
+              </button>
+              <button
+                type="button"
+                onClick={() => onChange('wantAgain', filters.wantAgain === 'no' ? '' : 'no')}
+                title="按主记录判定"
+                className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                  filters.wantAgain === 'no'
+                    ? 'bg-ink-700 text-paper-50 shadow-sm'
+                    : 'text-ink-700/70 hover:bg-paper-200'
+                }`}
+              >
+                <HeartCrack className="w-3.5 h-3.5" />
+                不想
+              </button>
             </div>
           </div>
 

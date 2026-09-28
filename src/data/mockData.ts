@@ -1,7 +1,14 @@
-import type { SmellMemory } from '../utils/constants';
+import type { SmellMemory, Reencounter } from '../utils/constants';
 
 const now = Date.now();
 const daysAgo = (d: number) => new Date(now - d * 86400000).toISOString();
+const dateOnly = (d: number) => {
+  const dt = new Date(now - d * 86400000);
+  const y = dt.getFullYear();
+  const m = String(dt.getMonth() + 1).padStart(2, '0');
+  const day = String(dt.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+};
 
 export const mockMemories: SmellMemory[] = [
   {
@@ -18,6 +25,8 @@ export const mockMemories: SmellMemory[] = [
     want_again: true,
     created_at: daysAgo(42),
     updated_at: daysAgo(42),
+    archived: false,
+    primary_reencounter_id: null,
   },
   {
     id: 'mock-002',
@@ -33,6 +42,8 @@ export const mockMemories: SmellMemory[] = [
     want_again: true,
     created_at: daysAgo(28),
     updated_at: daysAgo(28),
+    archived: false,
+    primary_reencounter_id: null,
   },
   {
     id: 'mock-003',
@@ -48,6 +59,9 @@ export const mockMemories: SmellMemory[] = [
     want_again: true,
     created_at: daysAgo(18),
     updated_at: daysAgo(10),
+    // 最近一次重现被设为主记录：卡片与筛选以它为准，原始封存仍完整保留
+    archived: false,
+    primary_reencounter_id: 're-003-2',
   },
   {
     id: 'mock-004',
@@ -63,6 +77,8 @@ export const mockMemories: SmellMemory[] = [
     want_again: true,
     created_at: daysAgo(60),
     updated_at: daysAgo(60),
+    archived: false,
+    primary_reencounter_id: null,
   },
   {
     id: 'mock-005',
@@ -78,6 +94,8 @@ export const mockMemories: SmellMemory[] = [
     want_again: false,
     created_at: daysAgo(100),
     updated_at: daysAgo(55),
+    archived: false,
+    primary_reencounter_id: null,
   },
   {
     id: 'mock-006',
@@ -93,6 +111,8 @@ export const mockMemories: SmellMemory[] = [
     want_again: true,
     created_at: daysAgo(15),
     updated_at: daysAgo(15),
+    archived: false,
+    primary_reencounter_id: null,
   },
   {
     id: 'mock-007',
@@ -108,6 +128,8 @@ export const mockMemories: SmellMemory[] = [
     want_again: true,
     created_at: daysAgo(5),
     updated_at: daysAgo(5),
+    archived: false,
+    primary_reencounter_id: null,
   },
   {
     id: 'mock-008',
@@ -123,5 +145,79 @@ export const mockMemories: SmellMemory[] = [
     want_again: true,
     created_at: daysAgo(3),
     updated_at: daysAgo(2),
+    archived: false,
+    primary_reencounter_id: null,
+  },
+  {
+    // 已移走：本体与重现记录一起隐藏，在「移走区」可恢复
+    id: 'mock-009',
+    location: '旧出租屋楼下的烧烤摊',
+    source_guess: '炭烤孜然 + 冰镇啤酒',
+    intensity: 7,
+    humidity: 6,
+    season: 'summer',
+    smell_type: 'spicy',
+    memory_text: '加班到十一点，楼下烧烤摊的烟顺着窗户飘上来。烤串的孜然味混着隔壁桌的啤酒气，是疲惫日子里最实在的安慰。后来搬了家，那条街也翻新了。',
+    color_association: '#CD5C5C',
+    emotion: 'warm',
+    want_again: true,
+    created_at: daysAgo(75),
+    updated_at: daysAgo(20),
+    archived: true,
+    primary_reencounter_id: null,
+  },
+];
+
+export const mockReencounters: Reencounter[] = [
+  {
+    id: 're-001-1',
+    memory_id: 'mock-001',
+    date: dateOnly(10),
+    // 来源沿用上一条（此处即原始封存的来源）
+    source: '陈年樟木 + 旧毛衣',
+    intensity: 6,
+    want_again: true,
+    note: '樟木味淡了些，外婆说樟脑丸放少了。',
+    created_at: daysAgo(10),
+  },
+  {
+    id: 're-002-1',
+    memory_id: 'mock-002',
+    date: dateOnly(2),
+    source: '湿润的水泥地 + 草地腥气',
+    intensity: 7,
+    want_again: true,
+    note: '又一场大雨，草地的腥气比记忆里更冲。',
+    created_at: daysAgo(2),
+  },
+  {
+    id: 're-003-1',
+    memory_id: 'mock-003',
+    date: dateOnly(8),
+    source: '旧纸张 + 某个人的香水',
+    intensity: 5,
+    want_again: true,
+    note: '回去了一趟，霉味还在，香水换成了消毒水味。',
+    created_at: daysAgo(8),
+  },
+  {
+    id: 're-003-2',
+    memory_id: 'mock-003',
+    date: dateOnly(1),
+    source: '旧纸张 + 新书油墨',
+    intensity: 3,
+    want_again: false,
+    note: '五楼改成了自习室，味道完全不一样了，就让原来的气味留在记忆里吧。',
+    created_at: daysAgo(1),
+  },
+  {
+    id: 're-009-1',
+    memory_id: 'mock-009',
+    date: dateOnly(25),
+    source: '炭烤孜然 + 冰镇啤酒',
+    intensity: 5,
+    want_again: true,
+    note: '临走前又去闻了一次，摊子已经在转让。',
+    created_at: daysAgo(25),
   },
 ];

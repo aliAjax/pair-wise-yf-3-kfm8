@@ -16,6 +16,30 @@ export interface SmellMemory {
   want_again: boolean;
   created_at: string;
   updated_at: string;
+  /** 状态层：是否已被「移走」（软删除）。移走后本体与全部重现记录一起隐藏，恢复后回来 */
+  archived?: boolean;
+  /** 状态层：指定哪条重现记录作为主记录；为 null/undefined 时以原始封存值为主记录 */
+  primary_reencounter_id?: string | null;
+}
+
+/**
+ * 重现记录：隔段时间再次闻到同一种气味时的一次独立记录。
+ * 原记忆内容永远不会被重现记录覆盖；来源默认沿用上一条，改动只影响本次。
+ */
+export interface Reencounter {
+  id: string;
+  memory_id: string;
+  /** 重现日期（ISO 字符串） */
+  date: string;
+  /** 本次闻到时的来源猜测（默认沿用上一条来源） */
+  source: string;
+  /** 本次强度 1-10 */
+  intensity: number;
+  /** 本次是否还想再闻 */
+  want_again: boolean;
+  /** 本次的简短感受备注 */
+  note?: string;
+  created_at: string;
 }
 
 export const SEASONS: { value: Season; label: string; emoji: string }[] = [
