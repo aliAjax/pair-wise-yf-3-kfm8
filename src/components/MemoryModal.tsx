@@ -34,8 +34,10 @@ export default function MemoryModal({ isOpen, onClose, onSubmit, editingData }: 
   useEffect(() => {
     if (isOpen) {
       if (editingData) {
-        const { id, created_at, updated_at, ...rest } = editingData;
-        void id; void created_at; void updated_at;
+        const {
+          id, created_at, updated_at, relive_records, deleted_at, ...rest
+        } = editingData;
+        void id; void created_at; void updated_at; void relive_records; void deleted_at;
         setForm(rest);
       } else {
         setForm(defaultForm);
@@ -86,7 +88,7 @@ export default function MemoryModal({ isOpen, onClose, onSubmit, editingData }: 
               {editingData ? '编辑这段气味' : '封存一段新气味'}
             </h2>
             <p className="text-sm text-ink-700/60 mt-0.5 font-hand">
-              {editingData ? '回忆已经变了吗？修改它吧～' : '把此刻空气中的味道记录下来'}
+              {editingData ? '编辑初闻时的记录，重现记录不会受影响' : '把此刻空气中的味道记录下来'}
             </p>
           </div>
           <button

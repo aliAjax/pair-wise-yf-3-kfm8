@@ -2,6 +2,27 @@ export type Season = 'spring' | 'summer' | 'autumn' | 'winter';
 export type SmellType = 'woody' | 'floral' | 'fruity' | 'earthy' | 'spicy' | 'sweet' | 'musty' | 'fresh' | 'burnt' | 'other';
 export type Emotion = 'warm' | 'nostalgic' | 'peaceful' | 'melancholy' | 'joyful' | 'uncomfortable' | 'surprising';
 
+/**
+ * 重现记录：同一种气味隔段时间再次闻到时留下的「快照」。
+ * 只记录本次的来源、强度、感受与发生日期，不改动原始记忆。
+ * 来源默认沿用上一条记录，改动仅保存在本条记录内。
+ */
+export interface ReliveRecord {
+  id: string;
+  /** 重现发生的日期，ISO 格式 */
+  date: string;
+  /** 本次闻到的气味来源（沿用上一条，可只改这次） */
+  source_guess: string;
+  /** 本次强度 1-10 */
+  intensity: number;
+  /** 这次是否还想再闻 */
+  want_again: boolean;
+  /** 本条记录创建时间 ISO 格式 */
+  created_at: string;
+}
+
+export type ReliveInput = Pick<ReliveRecord, 'date' | 'source_guess' | 'intensity' | 'want_again'>;
+
 export interface SmellMemory {
   id: string;
   location: string;
@@ -16,6 +37,10 @@ export interface SmellMemory {
   want_again: boolean;
   created_at: string;
   updated_at: string;
+  /** 历次重现记录，仅追加，不覆盖原始内容 */
+  relive_records: ReliveRecord[];
+  /** 软删除时间：非空表示已移走（重现记录随之一起隐藏），恢复后置回 null */
+  deleted_at?: string | null;
 }
 
 export const SEASONS: { value: Season; label: string; emoji: string }[] = [
